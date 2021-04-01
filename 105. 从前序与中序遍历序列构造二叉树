@@ -1,0 +1,27 @@
+class Solution {
+
+    private Map<Integer,Integer> hash= new HashMap<>();//中序索引
+    private int[] pre;//前序数组
+    private int predx = 0;  //前序下标
+
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+
+        if(preorder.length == 0 || inorder.length == 0)    return null;
+
+        pre =preorder;
+
+        for(int i = 0; i < preorder.length; ++i)
+            hash.put(inorder[i],i);
+        return myBuildTree(0,preorder.length - 1);
+
+    }
+
+    TreeNode myBuildTree(int left, int right){
+        if(left > right)    return null;
+        TreeNode root = new TreeNode (pre[predx++]);
+        int indx = hash.get(root.val);
+        root.left = myBuildTree(left,indx - 1);
+        root.right = myBuildTree(indx + 1,right);
+        return root;
+    }
+}
