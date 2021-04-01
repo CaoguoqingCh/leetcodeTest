@@ -1,0 +1,43 @@
+import java.util.Scanner;
+
+class Solution {
+
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        String s ="";
+        if(in.hasNext()){
+            s = in.nextLine();
+        }
+        in.close();
+        String[] array = s.split(",");
+        System.out.println(minChange(array[0],array[1]));
+    }
+     private static int minChange(String s1,String s2) {
+        int s1len = s1.length();
+        int s2len = s2.length();
+
+        if(s1len == 0)  return s2len;
+        if(s2len == 0)  return s1len;
+        int[][] dp = new int[s1len+1][s2len+1];
+        for(int i = 0 ; i < s1len; i++)
+            dp[i][0] = i;
+        for(int i = 0; i < s2len; i++)
+            dp[0][i] = i;
+        for(int i = 1; i <= s1len; i++)
+        {
+            for(int j = 1;j <= s2len; j++)
+            {
+                if(s1.charAt(i - 1) == s2.charAt(j - 1)){
+                    dp[i][j] = dp[i-1][j-1];
+                }else{
+                    dp[i][j] = findMin(dp[i-1][j-1]+1,dp[i][j-1]+1,dp[i-1][j] +1);
+                }
+            }
+        }
+        return dp[s1len][s2len];
+    }
+
+    private static int findMin(int a,int b,int c) {
+        return Math.min(a,Math.min(b,c));
+    }
+}
